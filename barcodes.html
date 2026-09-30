@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tripper Trap — Test Barcode Sheet</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Courier New', monospace;
+      background: #f4f4f4;
+      color: #111;
+      margin: 0;
+      padding: 24px;
+    }
+
+    header {
+      max-width: 900px;
+      margin: 0 auto 24px;
+    }
+
+    header h1 {
+      margin: 0 0 4px;
+      letter-spacing: 0.1rem;
+    }
+
+    header p {
+      margin: 0 0 12px;
+      opacity: 0.7;
+    }
+
+    #print-btn {
+      font-family: inherit;
+      font-size: 0.95rem;
+      padding: 8px 18px;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    #print-btn:hover {
+      background: #333;
+    }
+
+    .grid {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .card .label {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 2px;
+    }
+
+    .card .sound-name {
+      font-size: 0.85rem;
+      opacity: 0.6;
+      margin-bottom: 12px;
+    }
+
+    .card svg {
+      max-width: 100%;
+    }
+
+    .card .code-text {
+      font-size: 0.8rem;
+      opacity: 0.5;
+      margin-top: 4px;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+      #print-btn {
+        display: none;
+      }
+      .card {
+        border: 1px solid #999;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>TRIPPER TRAP — TEST BARCODE SHEET</h1>
+    <p>
+      Print this page, then scan each code with the USB scanner to test
+      triggers. These encode the placeholder strings from <code>TRIGGER_MAP</code>
+      in <code>app.js</code> — swap in your own strings/artwork once you've
+      designed real event barcodes.
+    </p>
+    <button id="print-btn" onclick="window.print()">Print this sheet</button>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <div class="label">KICK</div>
+      <div class="sound-name">trap_kick</div>
+      <svg class="barcode" data-code="trap_kick"></svg>
+    </div>
+    <div class="card">
+      <div class="label">SNARE</div>
+      <div class="sound-name">trap_snare</div>
+      <svg class="barcode" data-code="trap_snare"></svg>
+    </div>
+    <div class="card">
+      <div class="label">HI-HAT</div>
+      <div class="sound-name">trap_hat</div>
+      <svg class="barcode" data-code="trap_hat"></svg>
+    </div>
+    <div class="card">
+      <div class="label">BASS STAB</div>
+      <div class="sound-name">trap_bass</div>
+      <svg class="barcode" data-code="trap_bass"></svg>
+    </div>
+  </div>
+
+  <!-- JsBarcode from CDN, no build step — same philosophy as the main app -->
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <script>
+    document.querySelectorAll('.barcode').forEach((svg) => {
+      const code = svg.dataset.code;
+      JsBarcode(svg, code, {
+        format: 'CODE128',
+        lineColor: '#000',
+        width: 2.5,
+        height: 70,
+        displayValue: true,
+        fontSize: 14,
+        margin: 10,
+      });
+    });
+  </script>
+</body>
+</html>
