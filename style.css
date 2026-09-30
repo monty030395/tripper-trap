@@ -1,0 +1,201 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+  font-family: 'Courier New', monospace;
+  color: #eee;
+}
+
+#visual-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  z-index: 0;
+}
+
+/* ---------- Audio unlock gate ---------- */
+
+#audio-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.92);
+  transition: opacity 0.4s ease;
+}
+
+#audio-gate.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#audio-gate-box {
+  text-align: center;
+}
+
+#audio-gate-box h1 {
+  font-size: 3rem;
+  letter-spacing: 0.3rem;
+  margin: 0 0 0.5rem;
+  color: #fff;
+}
+
+#audio-gate-box p {
+  opacity: 0.7;
+  margin: 0 0 1.5rem;
+}
+
+#audio-gate-btn {
+  font-family: inherit;
+  font-size: 1.1rem;
+  padding: 0.75rem 2rem;
+  background: #fff;
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.1rem;
+}
+
+#audio-gate-btn:hover {
+  background: #ddd;
+}
+
+/* ---------- Debug scan-log overlay ---------- */
+
+#debug-panel {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+  width: 340px;
+  max-width: calc(100vw - 32px);
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 10px 12px;
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+}
+
+#debug-panel-header {
+  font-size: 0.7rem;
+  letter-spacing: 0.15rem;
+  opacity: 0.5;
+  margin-bottom: 6px;
+}
+
+#debug-log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.85rem;
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+#debug-log li {
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#debug-log li:last-child {
+  border-bottom: none;
+}
+
+#debug-log li .scan-time {
+  opacity: 0.4;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+#debug-log li .scan-code {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#debug-log li.matched .scan-code {
+  color: #6cff9e;
+}
+
+#debug-log li.unmapped .scan-code {
+  color: #ff6c6c;
+}
+
+/* ---------- Dev mode panel ---------- */
+
+#dev-panel {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 10px 12px;
+  backdrop-filter: blur(4px);
+  font-size: 0.85rem;
+}
+
+#dev-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+#dev-controls {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+#dev-input {
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 5px 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: #fff;
+  width: 180px;
+}
+
+#dev-input:focus {
+  outline: none;
+  border-color: #6cff9e;
+}
+
+#dev-send-btn {
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+}
+
+#dev-send-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}

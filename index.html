@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tripper Trap</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Full-screen visual feedback canvas -->
+  <canvas id="visual-canvas"></canvas>
+
+  <!-- Audio unlock overlay (browsers block audio until a user gesture) -->
+  <div id="audio-gate">
+    <div id="audio-gate-box">
+      <h1>TRIPPER TRAP</h1>
+      <p>Click / tap to enable audio</p>
+      <button id="audio-gate-btn">Start</button>
+    </div>
+  </div>
+
+  <!-- Debug overlay: shows raw scan strings as they arrive -->
+  <div id="debug-panel">
+    <div id="debug-panel-header">SCAN LOG</div>
+    <ul id="debug-log"></ul>
+  </div>
+
+  <!-- Dev mode controls: manually simulate a scan without hardware -->
+  <div id="dev-panel">
+    <label id="dev-toggle-label">
+      <input type="checkbox" id="dev-toggle" />
+      Dev mode (manual scan entry)
+    </label>
+    <div id="dev-controls" hidden>
+      <input type="text" id="dev-input" placeholder="type a barcode, press Enter" autocomplete="off" />
+      <button id="dev-send-btn">Send</button>
+    </div>
+  </div>
+
+  <!-- Tone.js from CDN, no build step -->
+  <script src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
