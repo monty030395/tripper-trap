@@ -56,6 +56,12 @@ html, body {
   margin: 0 0 1.5rem;
 }
 
+#app-version {
+  margin-top: 1.5rem;
+  font-size: 0.75rem;
+  opacity: 0.4;
+}
+
 #audio-gate-btn {
   font-family: inherit;
   font-size: 1.1rem;

@@ -8,8 +8,22 @@
 
 
 // ----------------------------------------------------------------------------
+// 0. VERSION — bump this on every push, so testers can confirm on the start
+//    screen that they're running the latest code and not a cached copy.
+// ----------------------------------------------------------------------------
+
+const APP_VERSION = 'v0.2 · 2026-10-08 · lower scan latency';
+document.getElementById('app-version').textContent = APP_VERSION;
+
+
+// ----------------------------------------------------------------------------
 // 1. SYNTHS (placeholders — swap trigger() bodies for sample playback later)
 // ----------------------------------------------------------------------------
+
+// Tone.js schedules every sound 100ms in the future by default ("lookAhead"),
+// which suits sequenced music but adds audible lag to live triggers. Zero it
+// so a scan plays the moment it arrives.
+Tone.context.lookAhead = 0;
 
 const kickSynth = new Tone.MembraneSynth({
   pitchDecay: 0.05,
@@ -110,6 +124,7 @@ audioGateBtn.addEventListener('click', async () => {
 // ----------------------------------------------------------------------------
 
 let scanBuffer = '';
+let scanStart = 0; // time the first character of the current scan arrived
 
 const devToggle = document.getElementById('dev-toggle');
 const devControls = document.getElementById('dev-controls');
@@ -128,10 +143,12 @@ function isIgnorableTarget(target) {
 
 function submitScan(raw) {
   const code = raw.trim();
+  const typingMs = scanStart ? Math.round(performance.now() - scanStart) : 0;
   scanBuffer = '';
+  scanStart = 0;
   devInput.value = '';
   if (!code) return;
-  handleScan(code);
+  handleScan(code, typingMs);
 }
 
 // Global capture: this is what a real USB scanner drives. Also fires
@@ -148,6 +165,7 @@ document.addEventListener('keydown', (e) => {
     syncDevInput();
   } else if (e.key.length === 1) {
     // Any single printable character (letters, digits, symbols).
+    if (!scanBuffer) scanStart = performance.now();
     scanBuffer += e.key;
     syncDevInput();
   }
@@ -167,7 +185,7 @@ devSendBtn.addEventListener('click', () => submitScan(devInput.value));
 // 5. SCAN HANDLING — look up the mapping, fire sound + visual, log it
 // ----------------------------------------------------------------------------
 
-function handleScan(code) {
+function handleScan(code, typingMs) {
   const mapping = TRIGGER_MAP[code];
   const matched = Boolean(mapping);
 
@@ -182,7 +200,7 @@ function handleScan(code) {
     flash(UNMAPPED.color, UNMAPPED.power);
   }
 
-  logScan(code, matched, matched ? mapping.label : UNMAPPED.label);
+  logScan(code, matched, matched ? mapping.label : UNMAPPED.label, typingMs);
 }
 
 
@@ -193,7 +211,9 @@ function handleScan(code) {
 const debugLog = document.getElementById('debug-log');
 const MAX_LOG_ENTRIES = 8;
 
-function logScan(code, matched, label) {
+// typingMs = how long the scanner took to "type" the code (first char to
+// Enter). If this is large, the delay is in the scanner, not the page.
+function logScan(code, matched, label, typingMs) {
   const li = document.createElement('li');
   li.className = matched ? 'matched' : 'unmapped';
 
@@ -203,7 +223,7 @@ function logScan(code, matched, label) {
 
   const text = document.createElement('span');
   text.className = 'scan-code';
-  text.textContent = `${code}  →  ${label}`;
+  text.textContent = `${code}  →  ${label}  (${typingMs}ms)`;
 
   li.appendChild(time);
   li.appendChild(text);
